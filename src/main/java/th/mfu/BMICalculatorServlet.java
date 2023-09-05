@@ -15,29 +15,31 @@ public class BMICalculatorServlet extends HttpServlet{
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //TODO: get parameter from request: "weight" and "height"
+        String weightinStr = request.getParameter("weight");
+        String heightinStr = request.getParameter("height");
+        response.setContentType("text/html");
+        //TODO: calculate bmi
         double weight = Double.parseDouble(request.getParameter("weight"));
         double height = Double.parseDouble(request.getParameter("height"));
-        //TODO: calculate bmi
-        double bmi = weight / ((height ) * (height ));
-        int roundedBMI = (int) Math.round(bmi);
+        double result = Math.round(weight/(height*height));
 
         //TODO: determine the built from BMI
-        String builtType ="normal";
-        if (bmi < 18.5) {
-            builtType = "underweight";
-        } else if (bmi < 25) {
-            builtType = "normal";
-        } else if (bmi < 30) {
-            builtType = "overweight";
-        } else if (bmi < 35) {
-            builtType = "obese";
+        String bmi_result ="normal";
+        if (result < 18.5) {
+            bmi_result = "underweight";
+        } else if (result < 25) {
+            bmi_result = "normal";
+        } else if (result < 30) {
+            bmi_result = "overweight";
+        } else if (result < 35) {
+            bmi_result = "obese";
         } else {
-            builtType = "extremely obese";
+            bmi_result = "extremely obese";
         }
       
         //TODO: add bmi and built to the request's attribute
-        request.setAttribute("bmi", roundedBMI);
-        request.setAttribute("builtType", builtType);
+        request.setAttribute("result", result);
+        request.setAttribute("bmi_result", bmi_result);
 
         
 
