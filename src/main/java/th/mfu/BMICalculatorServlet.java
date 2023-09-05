@@ -9,43 +9,46 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 //TODO: add webservlet to "/calbmi"
-@WebServlet("/calbmi")
+@WebServlet(urlPatterns = "/calbmi")
 public class BMICalculatorServlet extends HttpServlet{
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //TODO: get parameter from request: "weight" and "height"
-        String weightinStr = request.getParameter("weight");
-        String heightinStr = request.getParameter("height");
-        response.setContentType("text/html");
-        //TODO: calculate bmi
-        double weight = Double.parseDouble(request.getParameter("weight"));
-        double height = Double.parseDouble(request.getParameter("height"));
-        double result = Math.round(weight/(height*height));
+        String weightStr = request.getParameter("weight");
+        String heightStr = request.getParameter("height");
+        if (weightStr != null &&  !weightStr.isEmpty() && heightStr != null && !heightStr.isEmpty()) {
+            try {
+                //TODO: calculate bmi
+                Double weight = Double.parseDouble(weightStr);
+                Double height = Double.parseDouble(heightStr);
 
-        //TODO: determine the built from BMI
-        String bmi_result ="normal";
-        if (result < 18.5) {
-            bmi_result = "underweight";
-        } else if (result < 25) {
-            bmi_result = "normal";
-        } else if (result < 30) {
-            bmi_result = "overweight";
-        } else if (result < 35) {
-            bmi_result = "obese";
-        } else {
-            bmi_result = "extremely obese";
+                Double bmi = weight / (height * height);
+                //TODO: determine the built from BMI
+                String built = determineBuild(bmi);
+                //TODO: add bmi and built to the request's attribute
+                request.setAttribute("bmi", Math.round(bmi));
+                request.setAttribute("built",built);
+                //TODO: forward to jsp
+                request.getRequestDispatcher("/bmi_result.jsp").forward(request, response);
+            } catch (NumberFormatException e) {
+                response.getWriter().println("Invalid weight or height values.");
+            }
         }
-      
-        //TODO: add bmi and built to the request's attribute
-        request.setAttribute("result", result);
-        request.setAttribute("bmi_result", bmi_result);
+    }
 
-        
-
-        //TODO: forward to jsp
-        request.getRequestDispatcher("/bmi_result.jsp").forward(request, response);
-           
+    private String determineBuild(Double bmi) {
+        if( bmi < 18.5){
+            return "underweight";
+        }else if (bmi < 25){
+            return "normalweight";
+        }else if (bmi < 30){
+            return "overweight";
+        }else if (bmi < 35){
+            return "obese";
+        }else{
+            return "extremelyobese";
+        }
     }
     
 }

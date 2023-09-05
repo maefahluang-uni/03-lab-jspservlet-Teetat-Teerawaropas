@@ -20,7 +20,7 @@ public class TestBMICalculatorIT {
     private static Logger _logger = LoggerFactory.getLogger(TestBMICalculatorIT.class);
     private static String WEB_URI = "http://localhost:8080/calbmi";
 
-    @BeforeClass
+      @BeforeClass
     public static void createClient() {
         // Use ClientBuilder to create a new client that can be used to create
         // connections to the Web service.
@@ -67,23 +67,6 @@ public class TestBMICalculatorIT {
             assertThat(jsonResponse, CoreMatchers.containsString("normal"));
             _logger.info("IT1 test passed");
         }
-    }
-    @Test 
-    public void testCaclulate3(){
-        // Make a HTTP GET request to retrieve the last created Parolee.
-        try (Response response = client.target(WEB_URI+"?weight=75&height=1.7").request().get()) {
-
-            // Check that the HTTP response code is 200 OK.
-            int responseCode = response.getStatus();
-            assertEquals(200, responseCode);
-
-            String jsonResponse = response.readEntity(String.class);
-            assertThat(jsonResponse, CoreMatchers.containsString("Result is 28"));
-
-            assertThat(jsonResponse, CoreMatchers.containsString("underweight"));
-            _logger.info("IT1 test passed");
-        }
-        
     }
 
 }
